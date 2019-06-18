@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:provider_playground/counter.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,7 +13,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: ChangeNotifierProvider<Counter>(
+        builder: (_) => Counter(0),
+        child: HomePage(),
+      ),
     );
   }
 }
@@ -19,7 +24,7 @@ class MyApp extends StatelessWidget {
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    int _counter = 0;
+    final counter = Provider.of<Counter>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Provider Demo"),
@@ -32,7 +37,7 @@ class HomePage extends StatelessWidget {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$_counter',
+              '${counter.getCounter()}',
               style: Theme.of(context).textTheme.display1,
             ),
           ],
@@ -42,14 +47,14 @@ class HomePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           FloatingActionButton(
-            onPressed: () {},
+            onPressed: counter.increment,
             tooltip: 'Increment',
             child: Icon(Icons.add),
           ),
           SizedBox(height: 10),
           FloatingActionButton(
-            onPressed: () {},
-            tooltip: 'Increment',
+            onPressed: counter.decrement,
+            tooltip: 'Decrement',
             child: Icon(Icons.remove),
           )
         ],
